@@ -24,7 +24,6 @@ public class MainActivity extends Activity {
 
 		Spanned text = Html.fromHtml(source1);
 		tv.setText(text);
-		tv.setText("什么情况");
 
 	}
 
