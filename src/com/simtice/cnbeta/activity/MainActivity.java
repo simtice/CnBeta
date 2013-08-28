@@ -1,11 +1,5 @@
 package com.simtice.cnbeta.activity;
 
-import com.simtice.cnbeta.R;
-import com.simtice.cnbeta.R.id;
-import com.simtice.cnbeta.R.layout;
-import com.simtice.cnbeta.R.menu;
-import com.simtice.cnbeta.util.HttpUtil;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Html;
@@ -13,6 +7,9 @@ import android.text.Spanned;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
+
+import com.simtice.cnbeta.R;
+import com.simtice.cnbeta.util.HttpUtil;
 
 public class MainActivity extends Activity {
 
