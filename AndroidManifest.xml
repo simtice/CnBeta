@@ -10,21 +10,31 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.simtice.cnbeta.activity.MainActivity"
-            android:label="@string/app_name" >
+            android:name="com.simtice.cnbeta.ui.MainNewsListActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.simtice.cnbeta.ui.NewsDetail"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.simtice.cnbeta.ui.Preference"
+            android:screenOrientation="portrait" />
     </application>
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    
 
 </manifest>

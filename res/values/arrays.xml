@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="entries_preference_picmode">
+        <item>预览图模式</item>
+        <item>logo模式</item>
+    </string-array>
+
+    <string-array name="entryvalues_preference_picmode">
+        <item>mode1</item>
+        <item>mode2</item>
+    </string-array>
+    
+</resources>

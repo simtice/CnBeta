@@ -1,86 +1,97 @@
 package com.simtice.cnbeta.util;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 
-import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.simtice.cnbeta.bean.Truncated;
+import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 
 public class HttpUtil {
 
-	private String urlStr = "http://api.cnbeta.com/api/getNewsList.php?limit=5";
-	String TAG = "HttpUtil";
+	private CommonLog log = null;
+	private Handler handler;
+	private final int TIMEOUT = 5 * 1000;
+	private int mType;
+	private Context context;
 
-	public void urlConn() {
-		try {
-			// URL
-			URL url = new URL(urlStr);
-			// HttpURLConnection
-			HttpURLConnection httpconn = (HttpURLConnection) url.openConnection();
-			httpconn.setRequestProperty("Connection", "Keep-Alive");
-			httpconn.setRequestProperty("User-Agent", "Mozilla/5.0 (Android;async-http/1.4.1)");
-			httpconn.setRequestProperty("Content-Type", "text/plain; charset=UTF-8");
+	public HttpUtil(Context context, Handler handler) {
+		this.log = new CommonLog("HttpUtil");
+		this.handler = handler;
+		this.context = context;
+	}
 
-			httpconn.connect();
+	public void requestNewsList(String curUrl, int type, long articleID) {
+		this.mType = type;
+		String urlStr = "";
+		if (articleID == 0) {
+			urlStr = Constant.URL_BASE + curUrl;
+		} else {
+			urlStr = Constant.URL_BASE + "/api/getNewsList.php?fromArticleId=" + articleID + "&limit=10";
+		}
+		urlConn(urlStr);
+	}
 
-			if (httpconn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-				Log.i(TAG, "请求成功");
-				InputStream inStream = httpconn.getInputStream();
-				StringBuffer content = new StringBuffer();
+	public void requestNewsDetail(long id) {
+		String url = Constant.URL_BASE + Constant.URL_NEWDDETAIL + id;
+		urlConn(url);
+	}
 
-				BufferedReader buffer = new BufferedReader(new InputStreamReader(inStream, "UTF-8"));
-				String inputLine = null;
-				while (((inputLine = buffer.readLine()) != null)) {
-					content.append(inputLine);
+	private void sendMessage(int what, Object obj, int arg1) {
+		Message msg = this.handler.obtainMessage();
+		msg.what = what;
+		msg.obj = obj;
+		msg.arg1 = arg1;
+		this.handler.sendMessage(msg);
+
+	}
+
+	private void urlConn(String urlStr) {
+		if (CommonUtil.isNetworkAvailable(this.context)) {
+			InputStream inStream = null;
+			HttpURLConnection httpconn = null;
+			try {
+				URL url = new URL(urlStr);
+				httpconn = (HttpURLConnection) url.openConnection();
+				httpconn.setRequestProperty("Connection", "Keep-Alive");
+				httpconn.setRequestProperty("User-Agent", "Mozilla/5.0 (Android;async-http/1.4.1)");
+				httpconn.setRequestProperty("Content-Type", "text/plain; charset=UTF-8");
+				httpconn.setConnectTimeout(TIMEOUT);
+				httpconn.setReadTimeout(TIMEOUT);
+				inStream = httpconn.getInputStream();
+				if (httpconn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+					StringBuffer content = new StringBuffer();
+					BufferedReader buffer = new BufferedReader(new InputStreamReader(inStream, "UTF-8"));
+					String inputLine = null;
+					while (((inputLine = buffer.readLine()) != null)) {
+						content.append(inputLine);
+					}
+					sendMessage(Constant.REQUEST_SUCCESS, content.toString(), this.mType);
+					log.i(content.toString());
+				} else {
+
 				}
-
-				inStream.close();
-				// Log.i(TAG, content.toString());
-				parseBeanFromJson(content.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+				sendMessage(Constant.REQUEST_FAILED, e, 0);
+			}
+			if (inStream != null) {
+				try {
+					inStream.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					sendMessage(Constant.REQUEST_FAILED, e, 0);
+				}
 			}
 			httpconn.disconnect();
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} else {
+			this.handler.sendEmptyMessage(Constant.NO_NETWORK);
 		}
 	}
 
-//	private String subStringStr(String str,String tag1,String tag2,String tag3,String tag4) {
-////		String temp = str;
-////		StringBuffer sb = new StringBuffer();
-////		sb.append(sub(str,tag1,tag2))
-//		
-////		String str1 = temp.substring(temp.indexOf("<p>") + "<p>".length(), temp.indexOf("<strong>"));
-////		String str2 = temp.substring(temp.indexOf("<strong>") + "<strong>".length(), temp.indexOf("</strong>"));
-////		String str3 = temp.substring(temp.indexOf("</strong>") + "</strong>".length(), temp.indexOf("</p>"));
-//
-//		return str1 + str2 + str3;
-//	}
-	
-	private String sub(String str,String tag1,String tag2){
-		return str.substring(str.indexOf(tag1) + tag1.length(), str.indexOf(tag2));
-	}
-
-	private void parseBeanFromJson(String jsonData) throws UnsupportedEncodingException {
-		Type listType = new TypeToken<ArrayList<Truncated>>() {
-		}.getType();
-		Gson gson = new Gson();
-		ArrayList<Truncated> users = gson.fromJson(jsonData, listType);
-		for (Truncated truncated : users) {
-//			// System.out.println(truncated.getPubtime());
-//			System.out.println(truncated.getTitle());
-//			// System.out.println(truncated.getTopicLogo());
-			System.out.println(truncated.getSummary());
-		}
-
-	}
 }

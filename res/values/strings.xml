@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">cnBeta</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">cnBeta资讯</string>
+    <string name="action_settings">设置</string>
+    <string name="action_web">使用浏览器打开</string>
+    <string name="action_share">分享</string>
+    
+    
+    <string name="preference_wifi">wifi</string>
+    <string name="preference_nopic">nopic</string>
+    <string name="preference_clearcache">cache</string>
 
 </resources>
