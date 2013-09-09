@@ -7,11 +7,13 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -181,5 +183,20 @@ public class MainNewsListActivity extends SherlockActivity {
 
 	long waitTime = 2000;
 	long touchTime = 0;
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
+			long currentTime = System.currentTimeMillis();
+			if((currentTime-touchTime)>=waitTime) {
+				Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();
+				touchTime = currentTime;
+			}else {
+				finish();
+			}
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 
 }
