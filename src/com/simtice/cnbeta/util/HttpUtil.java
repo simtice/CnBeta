@@ -15,7 +15,7 @@ public class HttpUtil {
 
 	private CommonLog log = null;
 	private Handler handler;
-	private final int TIMEOUT = 5 * 1000;
+	private final int TIMEOUT = 10 * 1000;
 	private int mType;
 	private Context context;
 
@@ -49,6 +49,11 @@ public class HttpUtil {
 		this.handler.sendMessage(msg);
 
 	}
+	
+	public void requestCommentList(long articleID){
+		String url = Constant.URL_BASE+Constant.URL_GETCOMMENT + articleID;
+		urlConn(url);
+	}
 
 	private void urlConn(String urlStr) {
 		if (CommonUtil.isNetworkAvailable(this.context)) {
@@ -73,7 +78,7 @@ public class HttpUtil {
 					sendMessage(Constant.REQUEST_SUCCESS, content.toString(), this.mType);
 					log.i(content.toString());
 				} else {
-
+					
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

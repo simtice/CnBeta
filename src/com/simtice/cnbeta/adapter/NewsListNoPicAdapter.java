@@ -3,8 +3,6 @@ package com.simtice.cnbeta.adapter;
 import java.util.List;
 
 import android.content.Context;
-import android.text.Html;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,18 +83,7 @@ public class NewsListNoPicAdapter extends BaseAdapter {
 		holder.title.getPaint().setFakeBoldText(true);
 		holder.time.setText("  " + list.get(arg0).getPubtime());
 		holder.comm.setText("  " + str);
-		
-//		String text = "<p><strong>感谢<a href=\"http://www.zoopda.com/\" target=\"_blank\">煮机网</a>的投递</strong><br/></p><p>之前，煮机在许多文章里提到了这样一个看法：小米3很可能在今年与魅族MX3的比拼中，落下阵来，原因有三，第一，小米扩展产品线，既增加了红米，又有小米电视，没有多少底蕴的小米，在研发、设计、技术上的积累不够，分散精力开发新产品的话，米3很可能无法延续米2的辉煌，即无法做到机器各方面都比较均衡，成为一部成熟的高性价比机器。</p>";
-		
-//		 Spanned text = Html.fromHtml(list.get(arg0).getSummary());
-//		 Spanned text1 = Html.fromHtml(text);
-		 String text = CommonUtil.parseHtml(list.get(arg0).getSummary());
-		// String text = CommonUtil.parseHtml(list.get(arg0).getSummary());
-//		String summary = list.get(arg0).getSummary();
-//		System.out.println(summary);
-		
-//		String temp = summary.substring(0, 50);
-		holder.summary.setText(text);
+		holder.summary.setText(CommonUtil.parseHtml(list.get(arg0).getSummary()));
 
 		return arg1;
 	}

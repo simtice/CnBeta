@@ -1,13 +1,35 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/web"
-        android:icon="@drawable/location_web_site"
-        android:showAsAction="ifRoom"
-        android:title="@string/action_web"/>
+        android:id="@+id/comment"
+        android:icon="@drawable/social_chat"
+        android:showAsAction="always"
+        android:title="@string/action_comment"/>
     <item
-        android:id="@+id/share"
-        android:icon="@drawable/social_share"
-        android:showAsAction="ifRoom"
-        android:title="@string/action_share"/>
+        android:id="@+id/more"
+        android:icon="@drawable/abs__ic_menu_moreoverflow_normal_holo_light"
+        android:showAsAction="always"
+        android:title="@string/action_more">
+        <menu>
+            <item
+                android:id="@+id/share"
+                android:icon="@drawable/social_share"
+                android:title="@string/action_share"
+                android:showAsAction="ifRoom"
+                />
+            <item
+                android:id="@+id/font"
+                android:icon="@drawable/biz_news_newspage_font_icon"
+                android:title="@string/action_font"
+                android:showAsAction="ifRoom"
+                />
+            <item
+                android:id="@+id/web"
+                android:icon="@drawable/location_web_site"
+                android:title="@string/action_web"
+                android:showAsAction="always"
+                />
+        </menu>
+    </item>
+
 </menu>

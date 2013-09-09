@@ -12,11 +12,11 @@
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/SherlockTheme" >
         <activity
             android:name="com.simtice.cnbeta.ui.MainNewsListActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"      >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,6 +28,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.simtice.cnbeta.ui.Preference"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.simtice.cnbeta.ui.CommentList"
             android:screenOrientation="portrait" />
     </application>
 
