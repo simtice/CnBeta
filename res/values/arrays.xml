@@ -20,4 +20,8 @@
 　　        <item>1</item>
 　　        <item>2</item>
 　　    </string-array>
+    <string-array name="comment">
+　　        <item>所有评论</item>
+　　        <item>热门评论</item>
+　　    </string-array>
 </resources>

@@ -17,7 +17,7 @@ public class ExceptionUtil {
 		} else {
 			tip = "数据获取失败";
 		}
-		CommonUtil.showToask(context, tip);
+		CommonUtil.showToast(context, tip);
 	}
 
 }

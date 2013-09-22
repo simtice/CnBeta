@@ -38,16 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@+id/iv_newsitem_image"
                 android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/tv_newsitem_summary"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="3"
-                    android:text="我们已经见到了不少有趣的新概念输入设备，从分体式键盘到悬浮打字应用。而本文要介绍的Haptix，则是一款紧凑型的三维运动传感器，可以将任何平面区域变成一个多点触控区域。相信它可以在一定程度上取代传统的键盘和鼠标。这款概念性设备已经在Kickstarter上筹集到了超过13万美元的资金，你只要花上70美元就能够拿到这套3D多点触控设备。"
-                    android:textSize="15sp" />
-
+                
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -74,6 +65,16 @@
                         android:textColor="@color/gray"
                         android:textSize="13sp" />
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_newsitem_summary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:text="我们已经见到了不少有趣的新概念输入设备，从分体式键盘到悬浮打字应用。而本文要介绍的Haptix，则是一款紧凑型的三维运动传感器，可以将任何平面区域变成一个多点触控区域。相信它可以在一定程度上取代传统的键盘和鼠标。这款概念性设备已经在Kickstarter上筹集到了超过13万美元的资金，你只要花上70美元就能够拿到这套3D多点触控设备。"
+                    android:textSize="15sp" />
+
             </LinearLayout>
 
             <ImageView

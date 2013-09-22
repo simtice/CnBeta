@@ -1,15 +1,24 @@
 package com.simtice.cnbeta.bean;
 
+import com.j256.ormlite.field.DatabaseField;
 
 public class NewsList {
-	private String title;
-	private String pubtime;
+	@DatabaseField(id = true)
 	private long ArticleID;
+	@DatabaseField
+	private String title;
+	@DatabaseField
+	private String pubtime;
 	private boolean cmtClosed;
+	@DatabaseField
 	private String summary;
+	@DatabaseField
 	private String topicLogo;
+	@DatabaseField
 	private int cmtnum;
-	
+	@DatabaseField
+	private boolean isFavorite;
+	@DatabaseField
 	private String theme;
 
 	public String getTitle() {

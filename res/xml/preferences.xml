@@ -20,10 +20,15 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceCategory android:title="新闻浏览" >
+<!--         <CheckBoxPreference -->
+<!--             android:defaultValue="flase" -->
+<!--             android:key="@string/preference_nopic" -->
+<!--             android:title="无图模式" /> -->
         <CheckBoxPreference
-            android:defaultValue="flase"
-            android:key="@string/preference_nopic"
-            android:title="无图模式" />
+            android:defaultValue="true"
+            android:key="@string/preference_wifi"
+            android:title="2G/3G网络下不加载图片" 
+            android:summary="在非Wifi下节省流量"/>
 
         <ListPreference
             android:defaultValue="1"
@@ -34,11 +39,27 @@
             android:summary="中"
             android:title="字体大小" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="缓存" >
+    <PreferenceCategory android:title="缓存设置" >
         <PreferenceScreen
             android:key="@string/preference_clearcache"
             android:summary="6.0M"
             android:title="清理缓存" />
+        <CheckBoxPreference
+            android:key="@string/preference_auto_clearcache"
+            android:summary="当退出程序时,自动清除所有缓存"
+            android:title="自动清除缓存" 
+            android:defaultValue="false"/>
+        
     </PreferenceCategory>
-
+    <PreferenceCategory android:title="其他设置" >
+        <PreferenceScreen
+            android:key="@string/preference_feedback"
+            android:title="意见反馈" 
+            />
+        <PreferenceScreen
+            android:key="@string/preference_about"
+            android:title="关于" 
+            />
+	
+        </PreferenceCategory>
 </PreferenceScreen>

@@ -1,13 +1,31 @@
 package com.simtice.cnbeta.bean;
 
-public class CommentLists {
+import com.j256.ormlite.field.DatabaseField;
 
-	private String name;
-	private String date;
-	private String comment;
+public class Comment {
+
+	@DatabaseField(id = true)
 	private long tid;
+	@DatabaseField
+	private String name;
+	@DatabaseField
+	private String date;
+	@DatabaseField
+	private String comment;
+	@DatabaseField
 	private int support;
+	@DatabaseField
 	private int against;
+	@DatabaseField
+	private long ArticleID;
+
+	public long getArticleID() {
+		return ArticleID;
+	}
+
+	public void setArticleID(long articleID) {
+		ArticleID = articleID;
+	}
 
 	public String getName() {
 		return name;

@@ -10,7 +10,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="匿名人士"
         android:textSize="18sp" />
 
     <RelativeLayout
@@ -22,7 +21,6 @@
             android:id="@+id/tv_comment_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2013-5-6 13:53"
             android:textColor="@color/gray"
             android:textSize="13sp" />
 
@@ -38,16 +36,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
                 android:drawableLeft="@drawable/support"
-                android:text="10" 
                 android:textColor="@color/gray"
-                android:textSize="13sp"/>
+                android:textSize="13sp"
+                />
 
             <TextView
                 android:id="@+id/tv_comment_against"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/against"
-                android:text="5" 
                 android:textColor="@color/gray"
                 android:textSize="13sp"/>
         </LinearLayout>
@@ -57,7 +54,6 @@
         android:id="@+id/tv_comment_comment"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="什么情况"
         android:textSize="15sp" 
         />
     

@@ -10,11 +10,11 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/icon"
+        android:icon="@drawable/about_logo"
         android:label="@string/app_name"
         android:theme="@style/SherlockTheme" >
         <activity
-            android:name="com.simtice.cnbeta.ui.MainNewsListActivity"
+            android:name="com.simtice.cnbeta.ui.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"      >
             <intent-filter>
@@ -24,20 +24,51 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.simtice.cnbeta.ui.NewsDetail"
+            android:name="com.simtice.cnbeta.ui.MainNewsListActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"      >
+        </activity>
+        <activity
+            android:name="com.simtice.cnbeta.ui.NewsDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.simtice.cnbeta.ui.Preference"
+            android:name="com.simtice.cnbeta.ui.PreferenceActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.simtice.cnbeta.ui.CommentList"
+            android:name="com.simtice.cnbeta.ui.CommentListActivity"
             android:screenOrientation="portrait" />
+        
+        <activity android:name="com.umeng.fb.ConversationActivity" 
+            android:label="意见反馈"
+            android:screenOrientation="portrait"
+            android:icon="@drawable/icon"
+            />
+        <activity android:name="com.umeng.fb.ContactActivity" 
+            android:screenOrientation="portrait"/>
+        
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="52396cbf56240b4bdd0008c8"
+             >
+        </meta-data>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="Umeng" >
+        </meta-data>
+        
+         <activity
+            android:name="com.simtice.cnbeta.ui.AboutActivity"
+            android:screenOrientation="portrait" 
+            android:label="关于"
+            android:icon="@drawable/icon"/>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     
 
 </manifest>

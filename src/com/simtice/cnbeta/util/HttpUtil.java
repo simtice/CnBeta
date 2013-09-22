@@ -24,7 +24,7 @@ public class HttpUtil {
 		this.handler = handler;
 		this.context = context;
 	}
-
+	
 	public void requestNewsList(String curUrl, int type, long articleID) {
 		this.mType = type;
 		String urlStr = "";
@@ -36,11 +36,6 @@ public class HttpUtil {
 		urlConn(urlStr);
 	}
 
-	public void requestNewsDetail(long id) {
-		String url = Constant.URL_BASE + Constant.URL_NEWDDETAIL + id;
-		urlConn(url);
-	}
-
 	private void sendMessage(int what, Object obj, int arg1) {
 		Message msg = this.handler.obtainMessage();
 		msg.what = what;
@@ -49,14 +44,15 @@ public class HttpUtil {
 		this.handler.sendMessage(msg);
 
 	}
-	
-	public void requestCommentList(long articleID){
-		String url = Constant.URL_BASE+Constant.URL_GETCOMMENT + articleID;
-		urlConn(url);
+
+	public void httpGet(String url) {
+		String temp = Constant.URL_BASE + url;
+		urlConn(temp);
 	}
 
 	private void urlConn(String urlStr) {
 		if (CommonUtil.isNetworkAvailable(this.context)) {
+			log.i("request------------------------->" + urlStr);
 			InputStream inStream = null;
 			HttpURLConnection httpconn = null;
 			try {
@@ -78,7 +74,7 @@ public class HttpUtil {
 					sendMessage(Constant.REQUEST_SUCCESS, content.toString(), this.mType);
 					log.i(content.toString());
 				} else {
-					
+
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

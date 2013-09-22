@@ -3,6 +3,7 @@ package com.simtice.cnbeta.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +11,12 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.simtice.cnbeta.R;
-import com.simtice.cnbeta.bean.CommentLists;
+import com.simtice.cnbeta.bean.Comment;
 
 public class CommentAdapter extends BaseAdapter {
 	private LayoutInflater inflater;
-	private List<CommentLists> list;
-	public CommentAdapter(Context context, List<CommentLists> list) {
+	private List<Comment> list;
+	public CommentAdapter(Context context, List<Comment> list) {
 		inflater = LayoutInflater.from(context);
 		this.list = list;
 	}
@@ -56,8 +57,9 @@ public class CommentAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 
 		String name = list.get(position).getName();
-		if(name.equals(""));
+		if(TextUtils.isEmpty(name)){
 			name = "匿名人士";
+		}
 		holder.name.setText(name);
 		holder.against.setText(" " + list.get(position).getAgainst());
 		holder.support.setText(" " + list.get(position).getSupport());

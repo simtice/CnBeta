@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="230dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:background="@drawable/aa_button_light_normal"
-        android:orientation="vertical" >
+        android:orientation="vertical" 
+        >
 
         <TextView
             android:id="@+id/tv_newsitem_title"
@@ -23,10 +24,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="5dp" 
-            android:paddingBottom="5dp">
+            android:paddingTop="5dp" >
 
             <TextView
                 android:id="@+id/tv_newsitem_time"
@@ -48,12 +49,30 @@
                 android:textSize="13sp" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/iv_newsitem_image"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/aa_photo_empty"
-            android:scaleType="centerInside" />
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:id="@+id/iv_newsitem_image"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/aa_photo_empty"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tv_newsitem_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textSize="15sp" 
+                android:visibility="visible"
+                android:paddingBottom="10dp"/>
+        </FrameLayout>
     </LinearLayout>
 
 </LinearLayout>

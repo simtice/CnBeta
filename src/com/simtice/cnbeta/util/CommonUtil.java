@@ -54,8 +54,12 @@ public class CommonUtil {
 		return netstate;
 	}
 
-	public static void showToask(Context context, String tip) {
+	public static void showToast(Context context, String tip) {
 		Toast.makeText(context, tip, Toast.LENGTH_SHORT).show();
+	}
+	
+	public static void showNoNetworkToast(Context context){
+		Toast.makeText(context, "网络不可用，请检查网络连接设置", Toast.LENGTH_SHORT).show();
 	}
 
 	public static int getScreenWidth(Context context) {
@@ -113,13 +117,11 @@ public class CommonUtil {
 		if (android.net.NetworkInfo.State.CONNECTED == wifiState
 				|| (mobileState != null && android.net.NetworkInfo.State.CONNECTED == mobileState)) {
 			// 有可用网络
-			System.out.println("**** Network is on");
 			return true;
 			// } else if (State.DISCONNECTED == wifiState && State.DISCONNECTED
 			// == mobileState && State.DISCONNECTED == ethernetState){
 		} else if (State.DISCONNECTED == wifiState && State.DISCONNECTED == mobileState) {
 			// 网络不可用
-			System.out.println("**** Network is off");
 			return false;
 		}
 		return false;

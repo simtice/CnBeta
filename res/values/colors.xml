@@ -4,4 +4,11 @@
     <color name="white">#ffffff</color>
 	<color name="black">#000000</color>
 	<color name="gray">#B0B0B0</color>
+	<color name="gray_text">#545454</color>
+	<color name="holo_blue">#00BFFF</color>
+	<color name="hm_bg">#FFFFF0</color>
+	
+	
+	
+	
 </resources>

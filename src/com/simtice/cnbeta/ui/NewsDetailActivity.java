@@ -29,10 +29,11 @@ import com.simtice.cnbeta.util.PreferencesUtil;
 
 /**
  * 新闻详情
+ * 
  * @author simtice
- *
+ * 
  */
-public class NewsDetail extends SherlockActivity {
+public class NewsDetailActivity extends SherlockActivity {
 	private WebView webView;
 	private CommonLog log;
 	private long articleID;
@@ -42,6 +43,9 @@ public class NewsDetail extends SherlockActivity {
 
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
+			if (getApplicationContext() == null)
+				return;
+
 			switch (msg.what) {
 			case Constant.REQUEST_SUCCESS:
 				log.d(msg.obj);
@@ -53,7 +57,7 @@ public class NewsDetail extends SherlockActivity {
 				btReload.setVisibility(View.VISIBLE);
 				break;
 			case Constant.NO_NETWORK:
-				CommonUtil.showToask(getApplicationContext(), "网络不可用，请检查网络连接设置");
+				CommonUtil.showNoNetworkToast(getApplicationContext());
 				break;
 			}
 		};
@@ -62,13 +66,11 @@ public class NewsDetail extends SherlockActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_PROGRESS);
-
 		setTheme(R.style.Sherlock___Theme_Light);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.news_detail);
 		initView();
 		init();
-
 	}
 
 	@Override
@@ -83,10 +85,6 @@ public class NewsDetail extends SherlockActivity {
 		Intent intent = getIntent();
 		articleID = intent.getLongExtra("ArticleID", 0);
 		title = intent.getStringExtra("title");
-		if (articleID == 0) {
-			CommonUtil.showToask(getApplicationContext(), "加载新闻失败");
-			return;
-		}
 		requestHtml();
 	}
 
@@ -97,7 +95,7 @@ public class NewsDetail extends SherlockActivity {
 			@Override
 			public void run() {
 				HttpUtil util = new HttpUtil(getApplicationContext(), handler);
-				util.requestNewsDetail(articleID);
+				util.httpGet(Constant.URL_NEWDDETAIL + articleID);
 			}
 		}).start();
 	}
@@ -105,6 +103,7 @@ public class NewsDetail extends SherlockActivity {
 	@SuppressLint("SetJavaScriptEnabled")
 	private void initView() {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setIcon(R.drawable.icon);
 		btReload = (Button) this.findViewById(R.id.btn_detail_bt);
 		webView = (WebView) findViewById(R.id.wv_newsdetail);
 		wSet = webView.getSettings();
@@ -158,7 +157,7 @@ public class NewsDetail extends SherlockActivity {
 		// });
 
 		setTextSize(PreferencesUtil.getFontPreference(getApplicationContext()));
-		
+
 	}
 
 	@Override
@@ -176,7 +175,7 @@ public class NewsDetail extends SherlockActivity {
 			finish();
 			break;
 		case R.id.comment:
-			Intent intent = new Intent(NewsDetail.this, CommentList.class);
+			Intent intent = new Intent(NewsDetailActivity.this, CommentListActivity.class);
 			intent.putExtra("ArticleID", articleID);
 			startActivity(intent);
 
@@ -184,7 +183,7 @@ public class NewsDetail extends SherlockActivity {
 		case R.id.share:
 			Intent intent1 = new Intent(Intent.ACTION_SEND);
 			intent1.setType("text/plain");
-			intent1.putExtra(Intent.EXTRA_TEXT, title+"\n"+url+"\n[cnBeta资讯]");
+			intent1.putExtra(Intent.EXTRA_TEXT, title + "\n" + url + "\n[cnBeta资讯]");
 			intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(Intent.createChooser(intent1, "将资讯分享到"));
 
