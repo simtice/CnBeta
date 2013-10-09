@@ -11,13 +11,13 @@ public class ExceptionUtil {
 	 * @param context
 	 */
 	public static void handlException(Exception e, Context context) {
-		String tip = "";
+		String prompt = "";
 		if (e instanceof SocketTimeoutException) {
-			tip = "网络不稳定，请稍候再试";
+			prompt = "网络不给力";
 		} else {
-			tip = "数据获取失败";
+			prompt = "数据获取失败";
 		}
-		CommonUtil.showToast(context, tip);
+		CommonUtil.showToast(context, prompt);
 	}
 
 }
