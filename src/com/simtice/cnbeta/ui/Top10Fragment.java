@@ -1,5 +1,6 @@
 package com.simtice.cnbeta.ui;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,35 +104,50 @@ public class Top10Fragment extends SherlockFragment {
 		return view;
 	}
 
-	private void getTop10() {
-		final Handler handler = new Handler() {
-			public void handleMessage(android.os.Message msg) {
-				if (getActivity().getApplicationContext() == null)
-					return;
+	static class MyHandler extends Handler{
+		WeakReference<Top10Fragment> mFragmet;
+		MyHandler(Top10Fragment fragment){
+			mFragmet = new WeakReference<Top10Fragment>(fragment);
+		}
+		@Override
+		public void handleMessage(Message msg) {
+			Top10Fragment fragment = mFragmet.get();
+			if (fragment.getActivity() == null)
+				return;
 
-				switch (msg.what) {
-				case Constant.REQUEST_SUCCESS:
-					Type listType = new TypeToken<ArrayList<Top10>>() {
-					}.getType();
+			switch (msg.what) {
+			case Constant.REQUEST_SUCCESS:
+				Type listType = new TypeToken<ArrayList<Top10>>() {
+				}.getType();
+				try {
 					List<Top10> temp = JsonUtil.parseBeanFromJson((String) msg.obj, listType);
-					lists.clear();
-					lists.addAll(temp);
-					adapter.notifyDataSetChanged();
-					listView.onRefreshComplete();
-					break;
-
-				case Constant.REQUEST_FAILED:
-					ExceptionUtil.handlException((Exception) msg.obj, getActivity().getApplicationContext());
-					listView.onRefreshComplete();
-					break;
-				case Constant.NO_NETWORK:
-					CommonUtil.showNoNetworkToast(getActivity().getApplicationContext());
-					listView.onRefreshComplete();
-					break;
+					fragment.lists.clear();
+					fragment.lists.addAll(temp);
+					fragment.adapter.notifyDataSetChanged();
+					
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					ExceptionUtil.handlException(e, fragment.getActivity());
 				}
+				fragment.listView.onRefreshComplete();
+				break;
 
-			};
-		};
+			case Constant.REQUEST_FAILED:
+				ExceptionUtil.handlException((Exception) msg.obj, fragment.getActivity());
+				fragment.listView.onRefreshComplete();
+				break;
+			case Constant.NO_NETWORK:
+				CommonUtil.showNoNetworkToast(fragment.getActivity());
+				fragment.listView.onRefreshComplete();
+				break;
+			}
+
+		}
+	}
+	
+	private void getTop10() {
+		final MyHandler handler = new MyHandler(this);
 
 		new Thread(new Runnable() {
 

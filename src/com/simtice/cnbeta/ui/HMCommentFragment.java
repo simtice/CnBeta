@@ -1,5 +1,6 @@
 package com.simtice.cnbeta.ui;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +64,7 @@ public class HMCommentFragment extends SherlockFragment {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -86,35 +88,7 @@ public class HMCommentFragment extends SherlockFragment {
 	}
 
 	private void getHMComment() {
-		final Handler handler = new Handler() {
-			public void handleMessage(android.os.Message msg) {
-				if (getActivity().getApplicationContext() == null)
-					return;
-
-				switch (msg.what) {
-				case Constant.REQUEST_SUCCESS:
-					Type listType = new TypeToken<ArrayList<HMComment>>() {
-					}.getType();
-					List<HMComment> temp = JsonUtil.parseBeanFromJson((String) msg.obj, listType);
-					lists.clear();
-					lists.addAll(temp);
-					adapter.notifyDataSetChanged();
-					listView.onRefreshComplete();
-					break;
-
-				case Constant.REQUEST_FAILED:
-					ExceptionUtil.handlException((Exception) msg.obj, getActivity().getApplicationContext());
-					listView.onRefreshComplete();
-					break;
-				case Constant.NO_NETWORK:
-					CommonUtil.showNoNetworkToast(getActivity().getApplicationContext());
-					listView.onRefreshComplete();
-					break;
-				}
-
-			};
-		};
-
+		final MyHandler handler = new MyHandler(this);
 		new Thread(new Runnable() {
 
 			@Override
@@ -125,7 +99,54 @@ public class HMCommentFragment extends SherlockFragment {
 
 		}).start();
 	}
-	
+
+	static class MyHandler extends Handler {
+		WeakReference<HMCommentFragment> mFragment;
+
+		public MyHandler(HMCommentFragment fragment) {
+			mFragment = new WeakReference<HMCommentFragment>(fragment);
+		}
+
+		@Override
+		public void handleMessage(Message msg) {
+			// TODO Auto-generated method stub
+			super.handleMessage(msg);
+			HMCommentFragment fragment = mFragment.get();
+
+			if (fragment.getActivity() == null)
+				return;
+
+			switch (msg.what) {
+			case Constant.REQUEST_SUCCESS:
+				Type listType = new TypeToken<ArrayList<HMComment>>() {
+				}.getType();
+
+				try {
+					List<HMComment> temp = JsonUtil.parseBeanFromJson((String) msg.obj, listType);
+					fragment.lists.clear();
+					fragment.lists.addAll(temp);
+					fragment.adapter.notifyDataSetChanged();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					ExceptionUtil.handlException(e, fragment.getActivity());
+				}
+				fragment.listView.onRefreshComplete();
+				break;
+
+			case Constant.REQUEST_FAILED:
+				ExceptionUtil.handlException((Exception) msg.obj, fragment.getActivity());
+				fragment.listView.onRefreshComplete();
+				break;
+			case Constant.NO_NETWORK:
+				CommonUtil.showNoNetworkToast(fragment.getActivity());
+				fragment.listView.onRefreshComplete();
+				break;
+			}
+
+		}
+	}
+
 	@Override
 	public void onDestroy() {
 		// TODO Auto-generated method stub
@@ -140,5 +161,5 @@ public class HMCommentFragment extends SherlockFragment {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

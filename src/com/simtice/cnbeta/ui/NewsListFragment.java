@@ -1,5 +1,6 @@
 package com.simtice.cnbeta.ui;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +48,7 @@ public class NewsListFragment extends SherlockFragment {
 	private BaseAdapter adapter;
 	private CommonLog log;
 	private Dao<NewsList, Integer> newsListDao = null;
-	
+
 	@Override
 	public void onDestroy() {
 		// TODO Auto-generated method stub
@@ -61,6 +63,7 @@ public class NewsListFragment extends SherlockFragment {
 			e.printStackTrace();
 		}
 	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -68,37 +71,7 @@ public class NewsListFragment extends SherlockFragment {
 	}
 
 	private void getNewsList(final int type, final long articleID) {
-		final Handler handler = new Handler() {
-			public void handleMessage(android.os.Message msg) {
-				if (getActivity().getApplicationContext() == null)
-					return;
-				switch (msg.what) {
-				case Constant.REQUEST_SUCCESS:
-					log.d(msg.obj);
-					Type listType = new TypeToken<ArrayList<NewsList>>() {
-					}.getType();
-					List<NewsList> temp = JsonUtil.parseBeanFromJson((String) msg.obj, listType);
-					if (msg.arg1 == Constant.TPYE_PULL_DOWN) {
-						list.clear();// 如果是下拉刷新就先清除数据
-						list.addAll(temp);
-						listView.setMode(Mode.BOTH);
-					} else if (msg.arg1 == Constant.TPYE_PULL_UP)
-						list.addAll(temp);
-					adapter.notifyDataSetChanged();
-					listView.onRefreshComplete();
-					break;
-				case Constant.REQUEST_FAILED:
-					ExceptionUtil.handlException((Exception) msg.obj, getActivity().getApplicationContext());
-					listView.onRefreshComplete();
-					break;
-				case Constant.NO_NETWORK:
-					CommonUtil.showNoNetworkToast(getActivity().getApplicationContext());
-					listView.onRefreshComplete();
-					break;
-				}
-			};
-		};
-
+		final MyHandler handler = new MyHandler(this);
 		new Thread(new Runnable() {
 
 			@Override
@@ -122,8 +95,13 @@ public class NewsListFragment extends SherlockFragment {
 		try {
 			newsListDao = DatabaseHelper.getHelper(getActivity()).getNewslistDataDao();
 			list.addAll(newsListDao.queryForAll());
+			for (NewsList news : list) {
+				log.i(news.getTheme());
+				log.i(news.getTopicLogo());
+				log.i("-------------------------------");
+			}
 			adapter.notifyDataSetChanged();
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -160,6 +138,62 @@ public class NewsListFragment extends SherlockFragment {
 										// 必须要在setAdapter之后
 
 		return view;
+	}
+
+	/**
+	 * ADT20以后加入了一条新的检查规则：确保类内部的handler不含有对外部类的隐式引用 。
+	 * Handler类应该应该为static类型，否则有可能造成泄露
+	 * 。在程序消息队列中排队的消息保持了对目标Handler类的应用。如果Handler是个内部类
+	 * ，那么它也会保持它所在的外部类的引用。为了避免泄露这个外部类，应该将Handler声明为static嵌套类，并且使用对外部类的弱应用。
+	 * 
+	 * @author simtice
+	 * 
+	 */
+	static class MyHandler extends Handler {
+		WeakReference<NewsListFragment> mFragment;
+
+		MyHandler(NewsListFragment fragment) {
+			mFragment = new WeakReference<NewsListFragment>(fragment);
+		}
+
+		@Override
+		public void handleMessage(Message msg) {
+			NewsListFragment fragment = mFragment.get();
+
+			if (fragment.getActivity() == null)
+				return;
+			switch (msg.what) {
+			case Constant.REQUEST_SUCCESS:
+				fragment.log.d(msg.obj);
+				Type listType = new TypeToken<ArrayList<NewsList>>() {
+				}.getType();
+				try {
+					List<NewsList> temp = JsonUtil.parseBeanFromJson((String) msg.obj, listType);
+					if (msg.arg1 == Constant.TPYE_PULL_DOWN) {
+						fragment.list.clear();// 如果是下拉刷新就先清除数据
+						fragment.list.addAll(temp);
+						fragment.listView.setMode(Mode.BOTH);
+					} else if (msg.arg1 == Constant.TPYE_PULL_UP)
+						fragment.list.addAll(temp);
+					fragment.adapter.notifyDataSetChanged();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					ExceptionUtil.handlException(e, fragment.getActivity());
+				}
+				fragment.listView.onRefreshComplete();
+				
+				break;
+			case Constant.REQUEST_FAILED:
+				ExceptionUtil.handlException((Exception) msg.obj, fragment.getActivity());
+				fragment.listView.onRefreshComplete();
+				break;
+			case Constant.NO_NETWORK:
+				CommonUtil.showNoNetworkToast(fragment.getActivity());
+				fragment.listView.onRefreshComplete();
+				break;
+			}
+		}
 	}
 
 }

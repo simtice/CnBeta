@@ -1,5 +1,7 @@
 package com.simtice.cnbeta.ui;
 
+import java.lang.ref.WeakReference;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -41,28 +43,6 @@ public class NewsDetailActivity extends SherlockActivity {
 	private String title;
 	private WebSettings wSet;
 
-	private Handler handler = new Handler() {
-		public void handleMessage(android.os.Message msg) {
-			if (getApplicationContext() == null)
-				return;
-
-			switch (msg.what) {
-			case Constant.REQUEST_SUCCESS:
-				log.d(msg.obj);
-				webView.loadDataWithBaseURL(null, (String) msg.obj, "text/html", "utf-8", null);
-				break;
-			case Constant.REQUEST_FAILED:
-				ExceptionUtil.handlException((Exception) msg.obj, getApplicationContext());
-				setSupportProgress(0);
-				btReload.setVisibility(View.VISIBLE);
-				break;
-			case Constant.NO_NETWORK:
-				CommonUtil.showNoNetworkToast(getApplicationContext());
-				break;
-			}
-		};
-	};
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_PROGRESS);
@@ -90,6 +70,7 @@ public class NewsDetailActivity extends SherlockActivity {
 
 	private void requestHtml() {
 		setSupportProgress(2000);// actionbar进度条满格为10000 1000代表10%的进度
+		final MyHandler handler = new MyHandler(this);
 		new Thread(new Runnable() {
 
 			@Override
@@ -233,6 +214,36 @@ public class NewsDetailActivity extends SherlockActivity {
 		webView.clearView();
 		requestHtml();
 		btReload.setVisibility(View.GONE);
+	}
+	
+	static class MyHandler extends Handler{
+		WeakReference<NewsDetailActivity> mActivity;
+		MyHandler(NewsDetailActivity activity){
+			mActivity = new WeakReference<NewsDetailActivity>(activity);
+		}
+		
+		public void handleMessage(android.os.Message msg) {
+			NewsDetailActivity activity = mActivity.get();
+			if (activity == null)
+				return;
+
+			switch (msg.what) {
+			case Constant.REQUEST_SUCCESS:
+				activity.log.d(msg.obj);
+				activity.webView.loadDataWithBaseURL(null, (String) msg.obj, "text/html", "utf-8", null);
+				break;
+			case Constant.REQUEST_FAILED:
+				ExceptionUtil.handlException((Exception) msg.obj, activity);
+				activity.setSupportProgress(0);
+				activity.btReload.setVisibility(View.VISIBLE);
+				break;
+			case Constant.NO_NETWORK:
+				CommonUtil.showNoNetworkToast(activity);
+				break;
+			}
+		};
+	
+		
 	}
 
 }

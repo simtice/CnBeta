@@ -175,7 +175,7 @@ public class FileHelper {
 		    	   return false;
 		       }
 		       
-		       boolean ret1 = file.createNewFile();
+//		       boolean ret1 = file.createNewFile();
 		       if (!ret){
 		    	   log.e("createNewFile fail filePath = " + filePath);
 		    	   return false;

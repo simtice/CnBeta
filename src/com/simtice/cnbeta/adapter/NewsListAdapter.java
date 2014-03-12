@@ -67,7 +67,7 @@ public class NewsListAdapter extends ImageLoadAdapter {
 	@Override
 	public View getView(int arg0, View arg1, ViewGroup arg2) {
 		// TODO Auto-generated method stub
-		ViewHolder2 holder2 = null;
+		ViewHolder holder = null;
 		final int type = getItemViewType(arg0);
 		if (arg1 == null) {
 			switch (type) {
@@ -79,16 +79,16 @@ public class NewsListAdapter extends ImageLoadAdapter {
 				break;
 			}
 			
-			holder2 = new ViewHolder2();
-			holder2.title = (TextView) arg1.findViewById(R.id.tv_newsitem_title);
-			holder2.time = (TextView) arg1.findViewById(R.id.tv_newsitem_time);
-			holder2.comm = (TextView) arg1.findViewById(R.id.tv_newsitem_com);
-			holder2.image = (ImageView) arg1.findViewById(R.id.iv_newsitem_image);
-			holder2.summary = (TextView) arg1.findViewById(R.id.tv_newsitem_summary);
-			arg1.setTag(holder2);
+			holder = new ViewHolder();
+			holder.title = (TextView) arg1.findViewById(R.id.tv_newsitem_title);
+			holder.time = (TextView) arg1.findViewById(R.id.tv_newsitem_time);
+			holder.comm = (TextView) arg1.findViewById(R.id.tv_newsitem_com);
+			holder.image = (ImageView) arg1.findViewById(R.id.iv_newsitem_image);
+			holder.summary = (TextView) arg1.findViewById(R.id.tv_newsitem_summary);
+			arg1.setTag(holder);
 
 		} else {
-			holder2 = (ViewHolder2) arg1.getTag();
+			holder = (ViewHolder) arg1.getTag();
 		}
 
 		String title = list.get(arg0).getTitle();
@@ -101,30 +101,30 @@ public class NewsListAdapter extends ImageLoadAdapter {
 			str = String.valueOf(comNum);
 		}
 
-		holder2.title.setText(title);
-		holder2.title.getPaint().setFakeBoldText(true);
-		holder2.time.setText(time);
-		holder2.comm.setText("  " + str);
-		holder2.summary.setText(CommonUtil.parseHtml(list.get(arg0).getSummary()));
+		holder.title.setText(title);
+		holder.title.getPaint().setFakeBoldText(true);
+		holder.time.setText(time);
+		holder.comm.setText("  " + str);
+		holder.summary.setText(CommonUtil.parseHtml(list.get(arg0).getSummary()));
 
 		switch (type) {
 		case 1:
 			if (PreferencesUtil.isNoShowPicIn2G(this.context)) {// 2G/3G下不现实图片
 				if (CommonUtil.isWifiConnect(this.context)) {// WIFI下显示图片
-					holder2.summary.setVisibility(View.GONE);
-					holder2.image.setVisibility(View.VISIBLE);
+					holder.summary.setVisibility(View.GONE);
+					holder.image.setVisibility(View.VISIBLE);
 					this.getLoader().setImageScaleType(ScaleType.CENTER_CROP);
-					this.loadImage(list.get(arg0).getTheme(), holder2.image, this.getDefaultBitmap());
+					this.loadImage(list.get(arg0).getTheme(), holder.image, this.getDefaultBitmap());
 
 				} else {
-					holder2.summary.setVisibility(View.VISIBLE);
-					holder2.image.setVisibility(View.GONE);
+					holder.summary.setVisibility(View.VISIBLE);
+					holder.image.setVisibility(View.GONE);
 				}
 			} else {
-				holder2.summary.setVisibility(View.GONE);
-				holder2.image.setVisibility(View.VISIBLE);
+				holder.summary.setVisibility(View.GONE);
+				holder.image.setVisibility(View.VISIBLE);
 				this.getLoader().setImageScaleType(ScaleType.CENTER_CROP);
-				this.loadImage(list.get(arg0).getTheme(), holder2.image, this.getDefaultBitmap());
+				this.loadImage(list.get(arg0).getTheme(), holder.image, this.getDefaultBitmap());
 			}
 
 			break;
@@ -132,19 +132,19 @@ public class NewsListAdapter extends ImageLoadAdapter {
 			if (PreferencesUtil.isNoShowPicIn2G(this.context)) {// 2G/3G下不现实图片
 				if (CommonUtil.isWifiConnect(this.context)) {// WIFI下显示图片
 				// holder2.summary.setVisibility(View.GONE);
-					holder2.image.setVisibility(View.VISIBLE);
+					holder.image.setVisibility(View.VISIBLE);
 					this.getLoader().setImageScaleType(ScaleType.FIT_CENTER);
-					this.loadImage(list.get(arg0).getTopicLogo(), holder2.image, this.getDefaultBitmap());
+					this.loadImage(list.get(arg0).getTopicLogo(), holder.image, this.getDefaultBitmap());
 
 				} else {
 					// holder2.summary.setVisibility(View.VISIBLE);
-					holder2.image.setVisibility(View.GONE);
+					holder.image.setVisibility(View.GONE);
 				}
 			} else {
 				// holder2.summary.setVisibility(View.GONE);
-				holder2.image.setVisibility(View.VISIBLE);
+				holder.image.setVisibility(View.VISIBLE);
 				this.getLoader().setImageScaleType(ScaleType.FIT_CENTER);
-				this.loadImage(list.get(arg0).getTopicLogo(), holder2.image, this.getDefaultBitmap());
+				this.loadImage(list.get(arg0).getTopicLogo(), holder.image, this.getDefaultBitmap());
 			}
 
 			break;
@@ -153,7 +153,7 @@ public class NewsListAdapter extends ImageLoadAdapter {
 		return arg1;
 	}
 
-	private static class ViewHolder2 {
+	private static class ViewHolder {
 		TextView title;
 		TextView summary;
 		TextView time;

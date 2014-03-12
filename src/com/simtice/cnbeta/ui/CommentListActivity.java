@@ -82,10 +82,10 @@ public class CommentListActivity extends SherlockActivity implements ActionBar.O
 					return;
 				switch (msg.what) {
 				case Constant.REQUEST_SUCCESS:
-					Type listType = new TypeToken<ArrayList<Comment>>() {
-					}.getType();
-					List<Comment> list = JsonUtil.parseBeanFromJson((String) msg.obj, listType);
 					try {
+						Type listType = new TypeToken<ArrayList<Comment>>() {
+						}.getType();
+						List<Comment> list = JsonUtil.parseBeanFromJson((String) msg.obj, listType);
 						for (Comment comment : list) {
 							comment.setArticleID(articleID);
 							DatabaseHelper.getHelper(getApplicationContext()).getCommentDao().create(comment);
@@ -94,9 +94,10 @@ public class CommentListActivity extends SherlockActivity implements ActionBar.O
 						if (lists.size() == 0) {
 							CommonUtil.showToast(getApplicationContext(), "暂无评论");
 						}
-					} catch (SQLException e) {
+					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						ExceptionUtil.handlException(e, CommentListActivity.this);
 					}
 					listView.onRefreshComplete();
 					break;

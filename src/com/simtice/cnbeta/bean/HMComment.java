@@ -14,7 +14,7 @@ public class HMComment {
 	@DatabaseField
 	private String title;
 	@DatabaseField
-	private int cmtClosed;
+	private boolean cmtClosed;
 	@DatabaseField
 	private int cmtnum;
 	@DatabaseField
@@ -60,11 +60,11 @@ public class HMComment {
 		this.title = title;
 	}
 
-	public int getCmtClosed() {
+	public boolean getCmtClosed() {
 		return cmtClosed;
 	}
 
-	public void setCmtClosed(int cmtClosed) {
+	public void setCmtClosed(boolean cmtClosed) {
 		this.cmtClosed = cmtClosed;
 	}
 

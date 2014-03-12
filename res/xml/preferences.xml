@@ -25,7 +25,7 @@
 <!--             android:key="@string/preference_nopic" -->
 <!--             android:title="无图模式" /> -->
         <CheckBoxPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="@string/preference_wifi"
             android:title="2G/3G网络下不加载图片" 
             android:summary="在非Wifi下节省流量"/>
